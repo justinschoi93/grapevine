@@ -39,8 +39,6 @@ userSchema
     .get(()=>{
         return this.friends.length;
     })
-//Gave schema instance methods
-userSchema.methods.putMethodNameHere = function (){};
 
 //Created a model named `User`
 const User = mongoose.model('User', userSchema);

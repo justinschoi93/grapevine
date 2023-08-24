@@ -17,6 +17,12 @@ const thoughtSchema = new mongoose.Schema({
         required: true
     },
     reactions:[reactionSchema],   
+},
+{
+    // toJSON: {
+    //     getters: true,
+    // },
+    // id: false,
 });
 
 thoughtSchema
