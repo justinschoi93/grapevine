@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const reactionSchema = new mongoose.Schema({
     reactionId: {
+        type: Schema.Types.ObjectId,
+        default: () => new Types.ObjectId
         //Mongoose's OBjectId data type
         //default: new ObjectId
     },
@@ -19,6 +21,13 @@ const reactionSchema = new mongoose.Schema({
         default: Date.now,
         //Use getter method to format timestamp on query
     }
+},
+{
+    // toJSON: {
+    //     getters: true,
+    // },
+    // id: false,
 })
 
+module.exports = reactionSchema;
 //How do we use the above schema as a subdocument within the reaction field of the Thought model?

@@ -16,14 +16,14 @@ const thoughtSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    reactions:{
-        //array of nested documents created with reactionSchema
-    }
+    reactions:[reactionSchema],   
 });
 
-
-//Added instance method to schema
-thoughtSchema.methods.nameOfMethodHere = function (){};
+thoughtSchema
+    .virtual('reactionCount')
+    .get(()=>{
+        return this.reactions.length;
+    })
 
 //Created `Thought` model, using thoughtSchema
 const Thought = mongoose.model('Thought', thoughtSchema);
