@@ -59,7 +59,7 @@ const updateThought = async (req, res) => {
         } else {
             res.json(thought);
         }
-        
+
     } catch (err) {
         res.status(500).json(err);
     }
@@ -91,7 +91,7 @@ const addReaction = async (req, res) => {
         const thought = Thought.findOneAndUpdate(
             { _id: req.params.thoughtId},
             { $addToSet: { reactions: req.body}},
-            { new: true }
+            { runValidators: true, new: true }
         )
         if (!thought) {
             res.status(404).json({ message: 'The thought does not exist!'});
@@ -107,10 +107,10 @@ const deleteReaction = async (req, res) => {
     try {
         const thought = Thought.findOneAndUpdate(
             { _id: req.params.thoughtId},
-            { $pull: { reactions: req.body}},
-            { new: true },
+            { $pull: { reactions: {reactionId: req.params.reactionId}}},
+            { runValidators: true, new: true },
         )
-        if (!thought.reactions.includes(req.body)) {
+        if (!thought) {
             res.status(404).json({ message: 'That reaction does not exist!'});
         } else {
             res.json({ message: `Reaction deleted from ${thought.username}'s thought!`});
