@@ -3,8 +3,8 @@ const friendRoutes = require('./friendRoutes');
 const thoughtRoutes = require('./throughtRoutes');
 const userRoutes = require('./userRoutes');
 
-router.use('/friends', friendRoutes);
 router.use('/users', userRoutes);
+router.use('/users/:userId/friends', friendRoutes);
 router.use('/thoughts', thoughtRoutes);
 
 
