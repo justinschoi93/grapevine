@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const { Schema } = require('mongoose');
 // Defined Schema
 const userSchema = new mongoose.Schema({
     username: {
@@ -11,9 +11,8 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        set: toLower,
         unique: true,
-        match: /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
+        match: /^([\w_\.-]+)@([\w_\.-]+)\.([a-z\.]{2,6})$/
         // Will the above check for a match before or after the string has been set toLower?
         //-/^([/w]{#ofChars})\@([/w]{#ofChars})\.([a-z]{3})\/$/
         //must be valid email

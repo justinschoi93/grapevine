@@ -1,18 +1,20 @@
-const {Thought} = require('../models');
+const { Thought, User } = require('../models');
 
 const getAllThoughts = async (req, res) => {
     try {
+        // console.log('gathering thoughts...');
         const thoughts = await Thought.find();
-
+        // console.log(thoughts);
         if (!thoughts) {
             res.status(404).json({message: 'There are no thoughts to display!'});
         } else {
-            res.json({thoughts});
+            res.json(thoughts);     
         }
     } catch (err) {
         res.status(500).json(err);
     }
 };
+
 
 const getThought = async (req, res) => {
     try {
@@ -29,16 +31,19 @@ const getThought = async (req, res) => {
 
 const createThought = async (req, res) => {
     try{
+        // console.log('creating thought...');
         const thought = await Thought.create(req.body);
+        // console.log(thought);
         const user = await User.findOneAndUpdate(
-            { _id: req.body.userId},
-            {$addToSet: {thoughts: thought._id}},
+            { username: req.body.username },
+            { $addToSet: {thoughts: thought._id} },
             { new: true}
         )
+        console.log(user);
         if (!user) {
             res.status(400).json({ message: 'Thought created, but the user does not exist!'});
         } else {
-            res.json({message: `New thought created at ${thought.createdAt}!`});
+            res.json(`"${thought.thoughtText}" -${thought.username}`);
         }
 
     } catch (err) {
@@ -48,7 +53,7 @@ const createThought = async (req, res) => {
 
 const updateThought = async (req, res) => {
     try{
-        const thought = Thought.findOneAndUpdate(
+        const thought = await Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
             { $set: req.body },
             { new: true },
@@ -67,19 +72,21 @@ const updateThought = async (req, res) => {
 
 const deleteThought = async (req, res) => {
     try {
-        const thought = Thought.findOneAndDelete({_id: req.params.thoughtId});
+        const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
+        // console.log(thought);
         if (!thought) {
             res.status(404).json({ message: 'That thought did not exist!'});
         }
-        const user = User.findOneAndUpdate(
-            { _id: thought.userId },
+        const user =await User.findOneAndUpdate(
+            { username: thought.username },
             { $pull: {thoughts: thought._id} },
             { new: true }
         )
+        // console.log(user);
         if (!user) {
             res.status(404).json({message: 'The thought was deleted, but the user does not exist!'});
         } else {
-            res.json({ message: `${user.username}'s thought has been deleted!`};)
+            res.json({ message: `${user.username}'s thought has been deleted!`});
         }
     } catch (err) {
         res.status(500).json(err);
@@ -88,7 +95,7 @@ const deleteThought = async (req, res) => {
 
 const addReaction = async (req, res) => {
     try {
-        const thought = Thought.findOneAndUpdate(
+        const thought = await Thought.findOneAndUpdate(
             { _id: req.params.thoughtId},
             { $addToSet: { reactions: req.body}},
             { runValidators: true, new: true }
@@ -105,7 +112,7 @@ const addReaction = async (req, res) => {
 
 const deleteReaction = async (req, res) => {
     try {
-        const thought = Thought.findOneAndUpdate(
+        const thought = await Thought.findOneAndUpdate(
             { _id: req.params.thoughtId},
             { $pull: { reactions: {reactionId: req.params.reactionId}}},
             { runValidators: true, new: true },
