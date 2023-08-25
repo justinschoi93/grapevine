@@ -2,15 +2,16 @@ const { Thought, User } = require('../models');
 
 const getAllThoughts = async (req, res) => {
     try {
-        // console.log('gathering thoughts...');
+        console.log('gathering thoughts...');
         const thoughts = await Thought.find();
-        // console.log(thoughts);
+        console.log(thoughts);
         if (!thoughts) {
             res.status(404).json({message: 'There are no thoughts to display!'});
         } else {
-            res.json(thoughts);     
+            return res.json(thoughts);     
         }
     } catch (err) {
+        console.log(err);
         res.status(500).json(err);
     }
 };

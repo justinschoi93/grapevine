@@ -19,19 +19,17 @@ const thoughtSchema = new mongoose.Schema({
     },
     reactions:[reactionSchema],   
 },
-// {
-//     toJSON: {
-//         getters: true,
-//     },
-//     id: false,
-// }
+{
+    toJSON: {
+        virtuals: true,
+    },
+    id: false,
+}
 );
 
 thoughtSchema
     .virtual('reactionCount')
-    .get(()=>{
-        return this.reactions.length;
-    })
+    .get(function () {`${this.reactions.length}`});
 
 //Created `Thought` model, using thoughtSchema
 const Thought = mongoose.model('Thought', thoughtSchema);

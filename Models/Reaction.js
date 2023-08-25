@@ -22,10 +22,10 @@ const reactionSchema = new mongoose.Schema({
     }
 },
 {
-    // toJSON: {
-    //     getters: true,
-    // },
-    // id: false,
+    toJSON: {
+        getters: true,
+    },
+    id: false,
 })
 
 module.exports = reactionSchema;
