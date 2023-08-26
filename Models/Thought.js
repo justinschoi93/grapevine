@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const reactionSchema = require('./Reaction');
 
-//Defined schema
+//thought Schema for Thought model
+
 const thoughtSchema = new mongoose.Schema({
     thoughtText:{
         type: String,
@@ -11,7 +12,7 @@ const thoughtSchema = new mongoose.Schema({
     createdAt:{
         type: Date,
         default: Date.now,
-        //format time stamp on query?
+        get: (date) => date.toLocaleDateString()
     },
     username:{
         type: String,
@@ -22,6 +23,7 @@ const thoughtSchema = new mongoose.Schema({
 {
     toJSON: {
         virtuals: true,
+        getters: true,
     },
     id: false,
 }
@@ -29,9 +31,10 @@ const thoughtSchema = new mongoose.Schema({
 
 thoughtSchema
     .virtual('reactionCount')
-    .get(function () {`${this.reactions.length}`});
+    .get(function(){this.reactions.length})
 
-//Created `Thought` model, using thoughtSchema
+//Creating Thought model
+
 const Thought = mongoose.model('Thought', thoughtSchema);
 
 //Exported `Thought`

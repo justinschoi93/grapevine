@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const { Schema } = require('mongoose');
+const { Schema, Types } = require('mongoose');
+
+//reaction Schema
 
 const reactionSchema = new mongoose.Schema({
     reactionId: {
@@ -18,7 +20,7 @@ const reactionSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        //Use getter method to format timestamp on query
+        get: ( date ) => date.toLocaleDateString()
     }
 },
 {
@@ -29,4 +31,3 @@ const reactionSchema = new mongoose.Schema({
 })
 
 module.exports = reactionSchema;
-//How do we use the above schema as a subdocument within the reaction field of the Thought model?

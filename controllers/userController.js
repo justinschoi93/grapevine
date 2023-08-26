@@ -1,5 +1,8 @@
 const {User, Thought} = require('../models');
 
+
+//Functions for user routes
+
 const getUsers = async (req, res) => {
     try{
         const users = await User.find();
@@ -42,7 +45,8 @@ const updateUser = async (req, res) => {
             {$set: req.body },
             {runvalidators: true, new: true }    
         );
-
+        
+        res.json(`${user.username}'s profile has been updated!`);
     } catch (err) {
         res.status(500).json(err);
     }
@@ -50,8 +54,8 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        const user = User.findOneAndDelete({_id: req.params.userId});
-
+        const user = await User.findOneAndDelete({ _id: req.params.userId });
+        console.log(user);
         if (!user) {
             res.status(404).json({message: 'This user does not exist!'});
         }

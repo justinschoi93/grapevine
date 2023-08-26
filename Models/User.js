@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
-// Defined Schema
+
+//user Schema for User model
+
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -12,10 +14,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        match: /^([\w_\.-]+)@([\w_\.-]+)\.([a-z\.]{2,6})$/
-        // Will the above check for a match before or after the string has been set toLower?
-        //-/^([/w]{#ofChars})\@([/w]{#ofChars})\.([a-z]{3})\/$/
-        //must be valid email
+        match: [/^([\w_\.-]+)@([\w_\.-]+)\.([a-z]{2,6})$/, 'Please use a valid email address.']
+        
     },
     thoughts: [
         {
@@ -29,17 +29,23 @@ const userSchema = new mongoose.Schema({
             ref: 'User',
         },
     ],
+},
+{
+    toJSON: {
+        virutals: true,
+        getters: true
+    }
 });
 
 
-//Setting Virtual
+//Setting Virtual and getter
+
 userSchema
     .virtual('friendCount')
-    .get(()=>{
-        return this.friends.length;
-    })
+    .get(function(){return this.friends.length});
 
-//Created a model named `User`
+//Creating User model
+
 const User = mongoose.model('User', userSchema);
 
 

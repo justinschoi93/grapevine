@@ -1,17 +1,20 @@
 const { User } = require('../models');
 
+
+//Functions for friend routes
+
 const addFriend = async (req, res) => {
     
     try {
         console.log('adding friend...');
         const friend = await User.findOne({ _id: req.body._id });
-        console.log(friend);
+        
         const user = await User.findOneAndUpdate(
             { _id: req.params.userId },
             { $addToSet: { friends: friend._id }},
             { runValidates: true, new: true }
         );
-        console.log(user)
+        
         if (!friend) {
             res.status(404).json({message: 'That friend does not exist!'});
         } else if (!user) {

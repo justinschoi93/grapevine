@@ -1,5 +1,7 @@
 const { Thought, User } = require('../models');
 
+//Functions for Thought Routes
+
 const getAllThoughts = async (req, res) => {
     try {
         console.log('gathering thoughts...');
@@ -32,9 +34,9 @@ const getThought = async (req, res) => {
 
 const createThought = async (req, res) => {
     try{
-        // console.log('creating thought...');
+        
         const thought = await Thought.create(req.body);
-        // console.log(thought);
+     
         const user = await User.findOneAndUpdate(
             { username: req.body.username },
             { $addToSet: {thoughts: thought._id} },
@@ -74,7 +76,7 @@ const updateThought = async (req, res) => {
 const deleteThought = async (req, res) => {
     try {
         const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
-        // console.log(thought);
+        
         if (!thought) {
             res.status(404).json({ message: 'That thought did not exist!'});
         }
@@ -83,7 +85,7 @@ const deleteThought = async (req, res) => {
             { $pull: {thoughts: thought._id} },
             { new: true }
         )
-        // console.log(user);
+       
         if (!user) {
             res.status(404).json({message: 'The thought was deleted, but the user does not exist!'});
         } else {
