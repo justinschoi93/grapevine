@@ -1,23 +1,18 @@
 const mongoose = require('mongoose');
 
-const dbURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/sgt-peppers-lonely-hearts-club-band-db';
 
-mongoose.connect( dbURI, { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
-    useIpv6:false,
-    useFindAndModify: false,
-    serverSelectionTimeoutMS: 5000,
-    socketTimeoutsMS: 5000,
-});
-mongoose.connection.on(  'connected', () => {
-    console.log(`Mongoose connected to ${dbURI}`);
-})
-mongoose.connection.on(  'error', ( err ) => {
-    console.log(`Mongoose connected to ${ err }`);
-})
-mongoose.connection.on(  'disconnected', () => {
-    console.log(`Mongoose disconnected}`);
-})
 
-module.exports = mongoose.connection;
+module.exports = (MONGODB_URI) => {
+    mongoose.connect( MONGODB_URI, { 
+        useNewUrlParser: true, 
+        useUnifiedTopology: true,
+    }).then(() => {
+        console.log('Connected to the database');
+        app.listen(port, () => {
+            console.log(`Listening at http://localhost:${port}`)
+        })
+    }).catch((err) => {
+        console.error(err.message);
+        process.exit(1);
+    });
+};
