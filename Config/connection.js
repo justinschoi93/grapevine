@@ -1,5 +1,23 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017/happycamperDB');
+const dbURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/sgt-peppers-lonely-hearts-club-band-db';
+
+mongoose.connect( dbURI, { 
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+    useIpv6:false,
+    useFindAndModify: false,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutsMS: 5000,
+});
+mongoose.connection.on(  'connected', () => {
+    console.log(`Mongoose connected to ${dbURI}`);
+})
+mongoose.connection.on(  'error', ( err ) => {
+    console.log(`Mongoose connected to ${ err }`);
+})
+mongoose.connection.on(  'disconnected', () => {
+    console.log(`Mongoose disconnected}`);
+})
 
 module.exports = mongoose.connection;

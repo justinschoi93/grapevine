@@ -1,4 +1,4 @@
-const express = require('express');
+const session = require('express-session');
 const db = require('./config/connection');
 const routes = require('./routes');
 
